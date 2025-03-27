@@ -1,6 +1,7 @@
 import Koa from "koa"
 import Router from 'koa-router';
 import bodyparser from 'koa-bodyparser';
+import bcrypt from "bcrypt";
 
 import {getKnex} from "./knex.js"
 
@@ -13,6 +14,14 @@ router.get('/', async (ctx) => {
 
 router.get("/users", async (ctx) => {
     ctx.response.body = {ok: true}
+
+    const knex = await getKnex()
+    const users = await knex("users")
+
+    ctx.body = {
+        users
+    }
+
     ctx.status = 200
 })
 
@@ -46,10 +55,12 @@ router.post("/register", async (ctx) => {
 
     const { username, password } = ctx.request.body
 
+    const passwordHash = await bcrypt.hash(password, 1)
+
     const result = await knex('users')
         .insert({
             username,
-            password_hash: password
+            password_hash: passwordHash
         })
         .returning("*")
     
