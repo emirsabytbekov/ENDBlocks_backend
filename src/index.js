@@ -25,6 +25,19 @@ router.get("/users", async (ctx) => {
     ctx.status = 200
 })
 
+router.get("/scores", async (ctx) => {
+    ctx.response.body = {success: true}
+
+    const knex = await getKnex()
+    const scores = await knex("highest_scores")
+
+    ctx.body = {
+        scores
+    }
+
+    ctx.status = 200
+})
+
 router.get("/user/:id", async (ctx) => {
     const knex = await getKnex()
     const user = await knex("users")
