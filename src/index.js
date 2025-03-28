@@ -51,7 +51,7 @@ router.get("/user/:id", async (ctx) => {
     ctx.status = 200
 })
 
-router.get("/users/:user_id/:h_score", async (ctx) => {
+router.get("/users/:user_id/:high-score", async (ctx) => {
     const knex = await getKnex()
     const h_score = await knex("highest_scores")
         .where({user_id: ctx.params.user_id })
@@ -85,16 +85,20 @@ router.post("/register", async (ctx) => {
     ctx.status = 201
 })
 
-router.post("/h_score", async (ctx) => {
+router.post("/high-score", async (ctx) => {
     const knex = await getKnex()
-    const new_h_score = ctx.request.body
-    console.log("post request to /record", new_h_score)
 
-    const result = await knex("records").insert(new_h_score).returning("*")
+    const { user_id, new_score } = ctx.request.body
+
+    await knex("highest_scores")
+        .where ({user_id : user_id})
+        .update ({score: new_score});
+    
+    const new_h_score = ctx.request.body
+    console.log("post request to /highest_scores", new_h_score)
 
     ctx.body = {
-        success: true,
-        
+        success: true
     }
     ctx.status = 201
 })
