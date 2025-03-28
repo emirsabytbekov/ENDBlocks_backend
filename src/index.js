@@ -4,6 +4,8 @@ import bodyparser from 'koa-bodyparser';
 import bcrypt from "bcrypt";
 import Joi from 'joi';
 
+import { usersRouter } from "./controllers/users.js";
+
 import {getKnex} from "./knex.js"
 
 const router = new Router()
@@ -13,18 +15,6 @@ router.get('/', async (ctx) => {
     ctx.body = { hello: "user" };
 });
 
-router.get("/users", async (ctx) => {
-    ctx.response.body = {ok: true}
-
-    const knex = await getKnex()
-    const users = await knex("users")
-
-    ctx.body = {
-        users
-    }
-
-    ctx.status = 200
-})
 
 router.get("/scores", async (ctx) => {
     ctx.response.body = {success: true}
@@ -36,18 +26,6 @@ router.get("/scores", async (ctx) => {
         scores
     }
 
-    ctx.status = 200
-})
-
-router.get("/user/:id", async (ctx) => {
-    const knex = await getKnex()
-    const user = await knex("users")
-        .where({id: ctx.params.id })
-        .first()
-
-    ctx.body = {
-        user
-    }
     ctx.status = 200
 })
 
@@ -130,17 +108,6 @@ router.post("/login", async (ctx) => {
 })
 
 
-router.get("/users", async (ctx) => {
-    const knex = await getKnex()
-    const res = await knex("users").select()
-
-    ctx.body = {
-        success: true,
-        posts: res
-    }
-    ctx.status = 201
-})
-
 const registerSchema = Joi.object({
     username: Joi.string().pattern(/^[A-Za-z]/).min(3).required(),
     password: Joi.string().min(4).max(10).required()
@@ -157,6 +124,7 @@ async function main() {
     const app = new Koa()
     app.use(bodyparser())
     app.use(router.routes())
+    app.use(usersRouter.routes())
     app.use(async (ctx) => {
         ctx.body = {
             hello: "world"
