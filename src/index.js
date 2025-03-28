@@ -5,8 +5,8 @@ import bodyparser from 'koa-bodyparser';
 import { getKnex } from "./knex.js"
 
 import { usersRouter } from "./routers/users.js";
+import { scoresRouter } from "./routers/scores.js";
 import { authRouter } from "./controllers/auth.js";
-import { scoresRouter } from "./controllers/scores.js";
 
 const router = new Router()
 

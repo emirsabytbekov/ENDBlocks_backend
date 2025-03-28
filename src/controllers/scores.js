@@ -1,30 +1,25 @@
-import Router from 'koa-router';
-import { getAllScores, getScoreById, setNewScore } from '../services/scores.js';
+import { fetchAllScores, fetchScoreById, setNewScore } from '../services/scores.js';
 
-export const scoresRouter = new Router;
-
-scoresRouter.get("/scores", async (ctx) => {
-    ctx.response.body = {success: true}
-
-    const scores = await getAllScores();
+export async function getAllScores(ctx) {
+    const scores = await fetchAllScores();
     ctx.body = {
         scores
     }
 
     ctx.status = 200
-})
+}
 
-scoresRouter.get("/users/:user_id", async (ctx) => {
+export async function getScoreById(ctx) {
     const user_id = ctx.params.user_id;
-    const highscore = await getScoreById(user_id);
+    const highscore = await fetchScoreById(user_id);
 
     ctx.body = {
         highscore
     }
     ctx.status = 200
-})
+}
 
-scoresRouter.post("/high-score", async (ctx) => {
+export async function updateScore(ctx) {
     const { user_id, new_score } = ctx.request.body
 
     await setNewScore(user_id, new_score);
@@ -33,4 +28,4 @@ scoresRouter.post("/high-score", async (ctx) => {
         success: true
     }
     ctx.status = 201
-})
+}
