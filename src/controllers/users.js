@@ -1,25 +1,20 @@
-import Router from 'koa-router';
-import { getAllUsers, getUserById } from '../services/users.js';
+import { fetchAllUsers, fetchUserById } from '../services/users.js';
 
-export const usersRouter = new Router; 
-
-usersRouter.get("/users", async (ctx) => {
-    ctx.response.body = {ok: true}
-    console.log("workinnnn");
-
-    const users = await getAllUsers()
+export async function getAllUsers(ctx) {
+    const users = await fetchAllUsers()
+    
     ctx.body = {
         users
     }
-
     ctx.status = 200
-})
+}
 
-usersRouter.get("/user/:id", async (ctx) => {
+export async function getUserById(ctx) {
     const id = ctx.params.id;
-    const user = await getUserById(id);
+    const user = await fetchUserById(id);
+    
     ctx.body = {
         user
     }
     ctx.status = 200
-})
+}

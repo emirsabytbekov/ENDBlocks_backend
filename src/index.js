@@ -2,11 +2,11 @@ import Koa from "koa"
 import Router from 'koa-router';
 import bodyparser from 'koa-bodyparser';
 
-import { usersRouter } from "./controllers/users.js";
+import { getKnex } from "./knex.js"
 
-import {getKnex} from "./knex.js"
+import { usersRouter } from "./routers/users.js";
 import { authRouter } from "./controllers/auth.js";
-import {scoresRouter} from "./controllers/scores.js";
+import { scoresRouter } from "./controllers/scores.js";
 
 const router = new Router()
 
