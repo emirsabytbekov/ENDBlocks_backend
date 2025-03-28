@@ -1,12 +1,8 @@
-import Router from 'koa-router';
 import bcrypt from "bcrypt";
 import Joi from 'joi';
 import { register, getUser } from '../services/auth.js';
 
-
-export const authRouter = new Router;
-
-authRouter.post("/register", async (ctx) => {
+export async function handleRegistration(ctx) {
     
     console.log("post request to /users MVC", ctx.request.body)
 
@@ -25,10 +21,9 @@ authRouter.post("/register", async (ctx) => {
         result
     }
     ctx.status = 201
-})
+}
 
-
-authRouter.post("/login", async (ctx) => {
+export async function handleLogin(ctx) {
     const {username, password} = ctx.request.body
     console.log("post request to /login MVC", username, password)
 
@@ -49,4 +44,4 @@ authRouter.post("/login", async (ctx) => {
 
     ctx.status = 200
     ctx.body = {message: "Login successful", user};
-})
+}

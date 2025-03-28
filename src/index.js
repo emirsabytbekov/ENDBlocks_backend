@@ -6,7 +6,7 @@ import { getKnex } from "./knex.js"
 
 import { usersRouter } from "./routers/users.js";
 import { scoresRouter } from "./routers/scores.js";
-import { authRouter } from "./controllers/auth.js";
+import { authRouter } from "./routers/auth.js";
 
 const router = new Router()
 
