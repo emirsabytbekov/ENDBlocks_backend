@@ -2,6 +2,7 @@ import Koa from "koa"
 import Router from 'koa-router';
 import bodyparser from 'koa-bodyparser';
 import bcrypt from "bcrypt";
+import Joi from 'joi';
 
 import {getKnex} from "./knex.js"
 
@@ -66,7 +67,7 @@ router.post("/register", async (ctx) => {
     const knex = await getKnex()
     console.log("post request to /users", ctx.request.body)
 
-    const { username, password } = ctx.request.body
+    const { username, password } = await registerSchema.validateAsync(ctx.request.body);
 
     const passwordHash = await bcrypt.hash(password, 1)
 
@@ -134,6 +135,11 @@ router.get("/users", async (ctx) => {
         posts: res
     }
     ctx.status = 201
+})
+
+const registerSchema = Joi.object({
+    username: Joi.string().pattern(/^[A-Za-z]/).min(3).required(),
+    password: Joi.string().min(4).max(10).required()
 })
 
 
