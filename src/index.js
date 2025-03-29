@@ -24,7 +24,7 @@ async function main() {
             await next();
         } catch (e) {
             if (e.isJoi) {
-               ctx.status = 400;
+                ctx.status = 400;
                 ctx.body = {
                     message: e.message,
                 };

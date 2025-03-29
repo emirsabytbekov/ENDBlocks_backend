@@ -22,7 +22,6 @@ export async function saveTokenToDB(userId, token) {
         .select('id');
 
     if (existingSession.length > 0) {
-        // Если сессия уже есть, обновляем токен
         await knex('tokens')
             .where('user_id', userId)
             .update({
@@ -30,7 +29,6 @@ export async function saveTokenToDB(userId, token) {
                 created_at: knex.fn.now() 
             });
     } else {
-        // Если сессии нет, создаем новую
         await knex('tokens')
             .insert({
             user_id: userId,

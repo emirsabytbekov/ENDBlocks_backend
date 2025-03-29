@@ -21,7 +21,7 @@ export async function handleRegistration(ctx) {
 
     ctx.cookies.set("sessionToken", sessionToken, {
         httpOnly: true,
-        //secure: true, будет работать только с https
+        //secure: true,
         sameSite: "Strict", 
         maxAge: 1000 * 60 * 60 * 24, 
     });
@@ -56,7 +56,7 @@ export async function handleLogin(ctx) {
 
     ctx.cookies.set("sessionToken", sessionToken, {
         httpOnly: true,
-        //secure: true, будет работать только с https
+        //secure: true,
         sameSite: "Strict",
         maxAge: 1000 * 60 * 60 * 24, 
     });
