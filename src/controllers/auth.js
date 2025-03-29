@@ -3,7 +3,7 @@ import Joi from "joi";
 import { v4 as uuidv4 } from "uuid";
 import Koa from 'koa';
 import koaBody from 'koa-bodyparser';
-import { register, getUser, saveTokenToDB } from "../services/auth.js";
+import { register, getUser, saveTokenToDB, deleteTokenonLogout} from "../services/auth.js";
 
 export async function handleRegistration(ctx) {
     console.log("post request to /users MVC", ctx.request.body);
@@ -64,4 +64,14 @@ export async function handleLogin(ctx) {
 
     ctx.status = 200;
     ctx.body = { message: "Login successful" };
+}
+
+export async function handleLogout(ctx) {
+    const sessionToken = ctx.cookies.get("sessionToken");
+    if (sessionToken) {
+        deleteTokenonLogout(sessionToken);
+    }
+    ctx.cookies.set("sessionToken", "", { maxAge: 0 });
+    ctx.status = 200;
+    ctx.body = { message: "Logged out successfully" };
 }

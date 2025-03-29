@@ -50,3 +50,8 @@ export async function saveTokenToDB(userId, token) {
         });
     }
 }
+
+export async function deleteTokenonLogout(sessionToken) {
+    const knex = await getKnex(); 
+    await knex("tokens").where("token", sessionToken).del();
+}
