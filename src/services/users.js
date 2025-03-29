@@ -15,3 +15,14 @@ export async function fetchUserById(id) {
 
     return user;
 }
+
+export async function fetchUser(username) {
+    const knex = await getKnex();
+
+    const result = await knex("users")
+        .where('username', username)
+        .select('*');
+    
+    const [user] = result;
+    return user;
+}

@@ -14,17 +14,6 @@ export async function register(username, passwordHash) {
     return result;
 }
 
-export async function getUser(username) {
-    const knex = await getKnex();
-
-    const result = await knex("users")
-        .where('username', username)
-        .select('*');
-    
-    const [user] = result;
-    return user;
-}
-
 export async function saveTokenToDB(userId, token) {
     const knex = await getKnex(); 
 

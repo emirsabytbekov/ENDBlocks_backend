@@ -1,16 +1,15 @@
 import bcrypt from "bcrypt";
 import Joi from "joi";
 import { v4 as uuidv4 } from "uuid";
-import Koa from 'koa';
-import koaBody from 'koa-bodyparser';
-import { register, getUser, saveTokenToDB, deleteTokenonLogout} from "../services/auth.js";
+import { register, saveTokenToDB, deleteTokenonLogout } from "../services/auth.js";
+import { fetchUser } from "../services/users.js"
 
 export async function handleRegistration(ctx) {
     console.log("post request to /users MVC", ctx.request.body);
 
     const registerSchema = Joi.object({
         username: Joi.string().pattern(/^[A-Za-z]/).min(3).required(),
-        password: Joi.string().min(4).max(10).required(),
+        password: Joi.string().min(4).max(20).required(),
     });
 
     const { username, password } = await registerSchema.validateAsync(ctx.request.body);
@@ -38,7 +37,7 @@ export async function handleLogin(ctx) {
     const { username, password } = ctx.request.body;
     console.log("post request to /login MVC", username, password);
 
-    const user = await getUser(username);
+    const user = await fetchUser(username);
     if (!user) {
         ctx.status = 401;
         ctx.body = { error: "Error finding user with that username" };

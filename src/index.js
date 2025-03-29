@@ -18,7 +18,34 @@ async function main() {
     const res = await knex.raw("select 1 + 1 as sum")
 
     const app = new Koa()
+
+    app.use(async (ctx, next) => {
+        try {
+            await next();
+        } catch (e) {
+            if (e.isJoi) {
+               ctx.status = 400;
+                ctx.body = {
+                    message: e.message,
+                };
+                return;
+            }
+            console.log(e);
+
+            ctx.status = 500;
+            ctx.body = {
+                message: e.message,
+            };
+        }
+    });
+
     app.use(bodyparser())
+
+    app.use(async (ctx, next) => {
+        console.log(ctx.method, ctx.url, ctx.body);
+        await next();
+    });
+
     app.use(router.routes())
     app.use(usersRouter.routes())
     app.use(authRouter.routes())
