@@ -23,6 +23,7 @@ async function main() {
     app.use(usersRouter.routes())
     app.use(authRouter.routes())
     app.use(scoresRouter.routes())
+    
     app.use(async (ctx) => {
         ctx.body = {
             hello: "world"
