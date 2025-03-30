@@ -1,4 +1,7 @@
 import Knex from 'knex';
+import dotenv from 'dotenv'
+
+dotenv.config();
 
 let knex;
 
@@ -7,7 +10,7 @@ export async function getKnex() {
         return knex;
     }
 
-    const PG_URI = 'postgres://postgres:SER23052007@localhost/postgres';
+    const PG_URI = process.env.PG_URI;
     knex = Knex(PG_URI);
 
     return knex;
